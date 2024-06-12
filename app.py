@@ -59,6 +59,8 @@ def inject_banner(url, banner_path, output_file, width, height):
         # Take a screenshot with the predefined resolution
         driver.save_screenshot(output_file)
         print(f"Screenshot saved as {output_file}")
+        driver.quit()
+        driver.close()
         return True
 
     finally:
