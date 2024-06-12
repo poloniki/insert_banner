@@ -50,11 +50,11 @@ def inject_banner(url, banner_path, output_file, width, height):
         banner.style.top = "0";
         banner.style.left = "0";
         banner.style.width = "100%";
-        banner.style.height = "100px";  // Adjust the height of the banner as needed
+        banner.style.height = "100px";
         document.body.appendChild(banner);
         """
         driver.execute_script(script)
-        time.sleep(2)  # Wait for the script to execute
+        time.sleep(5)  # Wait for the script to execute
 
         # Take a screenshot with the predefined resolution
         driver.save_screenshot(output_file)
