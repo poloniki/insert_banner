@@ -17,12 +17,15 @@ def inject_banner(url, banner_path, output_file, width, height):
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--window-size=1920,1080")  # Larger window size
 
-    driver = webdriver.Chrome(
-        service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
-        options=chrome_options,
-    )
-
+    driver = None
     try:
+        driver = webdriver.Chrome(
+            service=Service(
+                ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+            ),
+            options=chrome_options,
+        )
+
         # Set the window size to the predefined resolution
         driver.set_window_size(width, height)
 
@@ -54,12 +57,15 @@ def inject_banner(url, banner_path, output_file, width, height):
         # Take a screenshot with the predefined resolution
         driver.save_screenshot(output_file)
         print(f"Screenshot saved as {output_file}")
-        driver.quit()
-        driver.close()
         return True
 
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return False
+
     finally:
-        driver.quit()
+        if driver:
+            driver.quit()
 
 
 banner_path = "banners/image.png"
@@ -68,10 +74,10 @@ width = 728
 height = 1080
 
 with st.form("url"):
-    url = st.text_input("Url")
+    url = st.text_input("URL")
     button = st.form_submit_button("Insert MMA banner")
 
 if button:
     injected = inject_banner(url, banner_path, output_file, width, height)
     if injected:
-        st.image("injected_banner_screenshot.png", caption="MMA")
+        st.image(output_file, caption="MMA Banner Screenshot")
