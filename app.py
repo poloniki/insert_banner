@@ -7,6 +7,7 @@ import time
 import base64
 import streamlit as st
 
+
 # Function to inject a banner image above the first <h1> element in a given URL and take a screenshot with predefined resolution
 def inject_banner(url, banner_path, output_file, width, height):
     chrome_options = Options()
@@ -46,9 +47,9 @@ def inject_banner(url, banner_path, output_file, width, height):
         banner.style.width = "100%";
         banner.style.height = "100px";
         var h1 = document.querySelector("h1");
-        if (h1) {
+        if (h1) {{
             h1.parentNode.insertBefore(banner, h1);
-        }
+        }}
         """
         driver.execute_script(script)
         time.sleep(5)  # Wait for the script to execute
@@ -65,6 +66,7 @@ def inject_banner(url, banner_path, output_file, width, height):
     finally:
         if driver:
             driver.quit()
+
 
 banner_path = "banners/image.png"
 output_file = "injected_banner_screenshot.png"
