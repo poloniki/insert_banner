@@ -8,8 +8,8 @@ import base64
 import streamlit as st
 
 
-@st.cache_resource
-def get_driver():
+# Function to inject a horizontal top banner into a given URL and take a screenshot with predefined resolution
+def inject_banner(url, banner_path, output_file, width, height):
     chrome_options = Options()
     chrome_options.add_argument("--headless")  # Run in headless mode for testing
     chrome_options.add_argument("--disable-gpu")
@@ -17,15 +17,10 @@ def get_driver():
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--window-size=1920,1080")  # Larger window size
 
-    return webdriver.Chrome(
+    driver = webdriver.Chrome(
         service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
         options=chrome_options,
     )
-
-
-# Function to inject a horizontal top banner into a given URL and take a screenshot with predefined resolution
-def inject_banner(url, banner_path, output_file, width, height):
-    driver = get_driver()
 
     try:
         # Set the window size to the predefined resolution
