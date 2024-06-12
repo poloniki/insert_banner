@@ -5,18 +5,30 @@ import time
 import base64
 import streamlit as st
 
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.os_manager import ChromeType
 
-# Function to inject a horizontal top banner into a given URL and take a screenshot with predefined resolution
-def inject_banner(url, banner_path, output_file, width, height):
+
+@st.cache_resource
+def get_driver():
     # Set up Chrome options
     chrome_options = Options()
     chrome_options.add_argument("--headless")  # Run in headless mode for testing
     chrome_options.add_argument("--disable-gpu")
 
-    # Set up the Chrome driver
-    service = Service("driver/chromedriver")  # Ensure you have ChromeDriver installed
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    return webdriver.Chrome(
+        service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
+        options=chrome_options,
+    )
 
+
+# Function to inject a horizontal top banner into a given URL and take a screenshot with predefined resolution
+def inject_banner(url, banner_path, output_file, width, height):
+    # Ensure you have ChromeDriver installed
+    driver = get_driver()
     try:
         # Set the window size to the predefined resolution
         driver.set_window_size(width, height)
