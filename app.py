@@ -74,7 +74,10 @@ width = 728
 height = 1080
 
 with st.form("url"):
-    url = st.text_input("URL")
+    url = st.text_input(
+        "URL",
+        value="https://www.nytimes.com/2024/06/11/us/politics/hunter-biden-guilty-gun-trial.html",
+    )
     button = st.form_submit_button("Insert MMA banner")
 
 if button:
