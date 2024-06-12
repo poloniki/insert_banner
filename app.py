@@ -13,6 +13,9 @@ def get_driver():
     chrome_options = Options()
     chrome_options.add_argument("--headless")  # Run in headless mode for testing
     chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--window-size=1920,1080")  # Larger window size
 
     return webdriver.Chrome(
         service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
@@ -30,7 +33,7 @@ def inject_banner(url, banner_path, output_file, width, height):
 
         # Open the given URL
         driver.get(url)
-        time.sleep(3)  # Wait for the page to load
+        time.sleep(5)  # Increased wait time for the page to load
 
         # Read the local image file and encode it as a base64 string
         with open(banner_path, "rb") as image_file:
@@ -51,7 +54,7 @@ def inject_banner(url, banner_path, output_file, width, height):
         document.body.appendChild(banner);
         """
         driver.execute_script(script)
-        time.sleep(1)  # Wait for the script to execute
+        time.sleep(2)  # Wait for the script to execute
 
         # Take a screenshot with the predefined resolution
         driver.save_screenshot(output_file)
@@ -66,7 +69,6 @@ banner_path = "banners/image.png"
 output_file = "injected_banner_screenshot.png"
 width = 728
 height = 1080
-
 
 with st.form("url"):
     url = st.text_input("Url")
