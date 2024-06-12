@@ -7,8 +7,7 @@ import time
 import base64
 import streamlit as st
 
-
-# Function to inject a horizontal top banner into a given URL and take a screenshot with predefined resolution
+# Function to inject a banner image above the first <h1> element in a given URL and take a screenshot with predefined resolution
 def inject_banner(url, banner_path, output_file, width, height):
     chrome_options = Options()
     chrome_options.add_argument("--headless")  # Run in headless mode for testing
@@ -40,16 +39,16 @@ def inject_banner(url, banner_path, output_file, width, height):
         # Create a base64 data URL
         banner_url = f"data:image/png;base64,{encoded_string}"
 
-        # Inject a horizontal top banner by manipulating the DOM
+        # Inject a banner image above the first <h1> element
         script = f"""
         var banner = document.createElement("img");
         banner.src = "{banner_url}";
-        banner.style.position = "fixed";
-        banner.style.top = "0";
-        banner.style.left = "0";
         banner.style.width = "100%";
         banner.style.height = "100px";
-        document.body.appendChild(banner);
+        var h1 = document.querySelector("h1");
+        if (h1) {
+            h1.parentNode.insertBefore(banner, h1);
+        }
         """
         driver.execute_script(script)
         time.sleep(5)  # Wait for the script to execute
@@ -66,7 +65,6 @@ def inject_banner(url, banner_path, output_file, width, height):
     finally:
         if driver:
             driver.quit()
-
 
 banner_path = "banners/image.png"
 output_file = "injected_banner_screenshot.png"
